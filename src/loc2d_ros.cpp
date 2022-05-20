@@ -335,17 +335,10 @@ bool lama::Loc2DROS::initLaser(const sensor_msgs::LaserScanConstPtr& laser_scan)
     catch(tf::TransformException& e)
     { ROS_ERROR("Could not find origin of %s", laser_scan->header.frame_id.c_str()); return false; }
 
-    tf::Matrix3x3 mat(laser_origin.getRotation());
-    tfScalar yaw, pitch, roll;
-    mat.getEulerYPR(yaw, pitch, roll);
-
-    lama::Pose3D lp(laser_origin.getOrigin().x(),
-                    laser_origin.getOrigin().y(),
-                    laser_origin.getOrigin().z(),
-                    roll, pitch, yaw);
-
-    lasers_origin_.push_back( lp );
-        ROS_INFO("Laser is mounted upwards.");
+    double roll, pitch, yaw;
+    laser_origin.getBasis().getRPY(roll, pitch, yaw);
+    Pose3D lp(laser_origin.getOrigin().x(), laser_origin.getOrigin().y(), 0,
+                roll, pitch, yaw);
 
     int laser_index = (int)frame_to_laser_.size();  // simple ID generator :)
     frame_to_laser_[laser_scan->header.frame_id] = laser_index;
