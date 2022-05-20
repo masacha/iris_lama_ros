@@ -340,6 +340,8 @@ bool lama::Loc2DROS::initLaser(const sensor_msgs::LaserScanConstPtr& laser_scan)
     Pose3D lp(laser_origin.getOrigin().x(), laser_origin.getOrigin().y(), 0,
                 roll, pitch, yaw);
 
+    lasers_origin_.push_back( lp );
+
     int laser_index = (int)frame_to_laser_.size();  // simple ID generator :)
     frame_to_laser_[laser_scan->header.frame_id] = laser_index;
 
